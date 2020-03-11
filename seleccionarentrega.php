@@ -15,10 +15,14 @@ require_once(dirname(__FILE__) . '/classes/Funciones.php');
 class seleccionarentrega extends Module{
 	public function __construct(){
 		$this->name = 'seleccionarentrega';
-		$this->tab = 'front_office_features';
-		$this->version = 1.0;
+		$this->tab = 'shipping_logistics';
+		$this->version = '1.0.0';
 		$this->author = 'Roberto Rivera';
 		$this->need_instance = 0;
+		$this->ps_versions_compliancy = [
+            'min' => '1.6',
+            'max' => _PS_VERSION_
+        ];
 	 
 		parent::__construct();
 	 
@@ -29,7 +33,7 @@ class seleccionarentrega extends Module{
 	// Instalando
 	public function install(){
 		if(parent::install()== false OR
-		!$this->registerHook('displayCarrierList') OR
+		!$this->registerHook('displayBeforeCarrier') OR
 		!$this->registerHook('actionValidateOrder') OR
 		!$this->registerHook('displayOrderConfirmation') OR
 		!$this->registerHook('displayInvoice') OR
@@ -51,17 +55,20 @@ class seleccionarentrega extends Module{
 	}
 	
 	// Exterminate, Exterminate
-	public function uninstall(){
-	   if(!parent::uninstall())
-            Db::getInstance ()->execute ('DELETE FROM'._DB_PREFIX_.'fecha_entrega');
-        
-        Db::getInstance()->execute('DROP TABLE `'._DB_PREFIX_.'fecha_entrega`');
-        
-        parent::uninstall();
+	public function uninstall() {
+		if (!parent::uninstall() ||
+			!Configuration::deleteByName('seleccionarentrega')
+		) {
+			return false;
+		}
+
+		Db::getInstance ()->execute ('DELETE FROM'._DB_PREFIX_.'fecha_entrega');
+		Db::getInstance()->execute('DROP TABLE `'._DB_PREFIX_.'fecha_entrega`');
+		return true;
 	}
 
 	// Engancho en el transporte
-	public function hookDisplayCarrierList($params){
+	public function hookdisplayBeforeCarrier($params){
         global $smarty;
 		// Asigno la fecha de los tres proximos días para mostrarlos en el select que muestra los dias.
 		if(date('N') == 3){
