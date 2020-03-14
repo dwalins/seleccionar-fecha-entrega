@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-	<name>seleccionarentrega</name>
-	<displayName><![CDATA[seleccionarentrega]]></displayName>
-	<version><![CDATA[1.0]]></version>
+	<name><![CDATA[seleccionarentrega]]></name>
+	<displayName><![CDATA[Seleccionar Entrega]]></displayName>
+	<version><![CDATA[1.0.0]]></version>
 	<description><![CDATA[Modulo que permite escoger al cliente el dia y hora de entrega para su pedido]]></description>
-	<author><![CDATA[Roberto Rivera | Jalea Publicidad]]></author>
-	<tab><![CDATA[front_office_features]]></tab>
+	<author><![CDATA[Roberto Rivera]]></author>
+	<tab><![CDATA[shipping_logistics]]></tab>
 	<confirmUninstall><![CDATA[Estas seguro de querer desinstalar este modulo?]]></confirmUninstall>
 	<is_configurable>1</is_configurable>
 	<need_instance>0</need_instance>

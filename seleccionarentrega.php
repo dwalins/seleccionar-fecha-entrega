@@ -1,19 +1,31 @@
 <?php
 /**
-*
-*  @author    Roberto Rivera for dwalins.com
-*  @copyright dwalins.com
-*  @version   1.0
-*  http://dwalins.com
-*
-*/
+ * 2007-2020 PrestaShop and Contributors
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License 3.0 (AFL-3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/AFL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2020 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
+ * International Registered Trademark & Property of PrestaShop SA
+ */
+
 if ( !defined( '_PS_VERSION_' ) )
   exit;
  
 require_once(dirname(__FILE__) . '/classes/Funciones.php');
 
-class seleccionarentrega extends Module{
-	public function __construct(){
+class SeleccionarEntrega extends Module{
+	public function __construct()
+	{
 		$this->name = 'seleccionarentrega';
 		$this->tab = 'shipping_logistics';
 		$this->version = '1.0.0';
@@ -31,17 +43,16 @@ class seleccionarentrega extends Module{
     }
  
 	// Instalando
-	public function install(){
+	public function install()
+	{
 		if(parent::install()== false OR
 		!$this->registerHook('displayCarrierExtraContent') OR
-		!$this->registerHook('displayAfterCarrier') OR
+		!$this->registerHook('displayBeforeCarrier') OR
 		!$this->registerHook('actionValidateOrder') OR
 		!$this->registerHook('displayOrderConfirmation') OR
-		!$this->registerHook('displayInvoice') OR
-		!$this->registerHook('actionCarrierProcess'))
+		!$this->registerHook('displayInvoice'))
             return false;
 		
-		$carrier = $this->addCarrier();
         $sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'fecha_entrega`(
                         `delivery_date` text NOT NULL,
                         `id_deliverydate` int(10) unsigned NOT NULL auto_increment,
@@ -57,7 +68,8 @@ class seleccionarentrega extends Module{
 	}
 	
 	// Exterminate, Exterminate
-	public function uninstall() {
+	public function uninstall() 
+	{
 		if (!parent::uninstall() ||
 			!Configuration::deleteByName('seleccionarentrega')
 		) {
@@ -69,13 +81,17 @@ class seleccionarentrega extends Module{
 		return true;
 	}
 
-	public function init(){
-		var_dump($_POST);
+	public function hookActionFrontControllerSetMedia()
+	{
+		$this->context->controller->registerJavascript(
+            'seleccionarentrega-funciones',
+            'modules/' . $this->name . '/views/js/seleccionarentrega.js'
+        );
 	}
 
 	// Engancho en el transporte
-	public function hookdisplayCarrierExtraContent($params){
-        global $smarty;
+	public function hookdisplayBeforeCarrier($params)
+	{
 		// Asigno la fecha de los tres proximos días para mostrarlos en el select que muestra los dias.
 		if(date('N') == 3){
 			$this->context->smarty->assign('tomorrow', strtotime('+1 day'));
@@ -103,23 +119,15 @@ class seleccionarentrega extends Module{
 			$this->context->smarty->assign('afteraftertomorrow', strtotime('+3 day'));
 		}
 		
-        return $this->display(__FILE__,'views/frontend/fechaentrega.tpl');
+        return $this->display(__FILE__,'views/templates/front/fechaentrega.tpl');
     }
 	
-	// Proceso de compra: seleccionar transportista
-	public function hookActionCarrierProcess($params){
-		global $smarty;
-		// Doy de alta un registro en la base de datos con el id del carrito y la fecha de entrega
-		// Funciones::insertarCarrito($this->context->cart->id, $_POST['diasEntrega'] ." ". $_POST['horasEntrega']);
-	}
-	
-	
-	public function hookDisplayOrderConfirmation($params){
-		global $smarty;		
+	public function hookDisplayOrderConfirmation($params)
+	{		
 		// Recojo el id del carrito y del pedido
 		// TODO: Intentar recuperar estos id's de otra forma que no sea por GET
-		$id_order = $_GET['id_order'];
-		$id_cart = $_GET['id_cart'];
+		$id_order = Tools::getVaule('id_order');
+		$id_cart = Tools::getVaule('id_cart');
 		
 		// Uso funciones del archivo funciones
 		// La historia de las funciones y el archivo que tanto amaba, eran mas amigos cuantas más funciones usaba
@@ -127,39 +135,14 @@ class seleccionarentrega extends Module{
 	}
 	
 	// Detalles del pedido BO
-	public function hookDisplayInvoice($params){
-		$fecha_entrega = Funciones::getFechaEntrega($_GET['id_order']);
+	public function hookDisplayInvoice($params)
+	{
+		$fecha_entrega = Funciones::getFechaEntrega(Tools::getVaule('id_order'));
 		
 		$this->context->smarty->assign('fecha_entrega', $fecha_entrega);
 		
-		return $this->display(__FILE__,'views/backend/adminfechaentrega.tpl');
+		return $this->display(__FILE__,'views/templates/admin/adminfechaentrega.tpl');
 	}
-
-	protected function addCarrier()
-    {
-        $carrier = new Carrier();
-
-        $carrier->name = $this->l('Transportista');
-        $carrier->is_module = true;
-        $carrier->active = 1;
-        $carrier->range_behavior = 1;
-        $carrier->need_range = 1;
-        $carrier->shipping_external = true;
-        $carrier->range_behavior = 0;
-        $carrier->external_module_name = $this->name;
-        $carrier->shipping_method = 2;
-
-        foreach (Language::getLanguages() as $lang) {
-            $carrier->delay[$lang['id_lang']] = $this->l('Transportista');
-        }
-
-        if ($carrier->add() == true) {
-            return $carrier;
-        }
-
-        return false;
-    }
-
 
 }
 ?>
