@@ -33,13 +33,15 @@ class seleccionarentrega extends Module{
 	// Instalando
 	public function install(){
 		if(parent::install()== false OR
-		!$this->registerHook('displayBeforeCarrier') OR
+		!$this->registerHook('displayCarrierExtraContent') OR
+		!$this->registerHook('displayAfterCarrier') OR
 		!$this->registerHook('actionValidateOrder') OR
 		!$this->registerHook('displayOrderConfirmation') OR
 		!$this->registerHook('displayInvoice') OR
 		!$this->registerHook('actionCarrierProcess'))
             return false;
-        
+		
+		$carrier = $this->addCarrier();
         $sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'fecha_entrega`(
                         `delivery_date` text NOT NULL,
                         `id_deliverydate` int(10) unsigned NOT NULL auto_increment,
@@ -67,8 +69,12 @@ class seleccionarentrega extends Module{
 		return true;
 	}
 
+	public function init(){
+		var_dump($_POST);
+	}
+
 	// Engancho en el transporte
-	public function hookdisplayBeforeCarrier($params){
+	public function hookdisplayCarrierExtraContent($params){
         global $smarty;
 		// Asigno la fecha de los tres proximos días para mostrarlos en el select que muestra los dias.
 		if(date('N') == 3){
@@ -104,7 +110,7 @@ class seleccionarentrega extends Module{
 	public function hookActionCarrierProcess($params){
 		global $smarty;
 		// Doy de alta un registro en la base de datos con el id del carrito y la fecha de entrega
-		Funciones::insertarCarrito($this->context->cart->id, $_POST['diasEntrega'] ." ". $_POST['horasEntrega']);
+		// Funciones::insertarCarrito($this->context->cart->id, $_POST['diasEntrega'] ." ". $_POST['horasEntrega']);
 	}
 	
 	
@@ -128,6 +134,31 @@ class seleccionarentrega extends Module{
 		
 		return $this->display(__FILE__,'views/backend/adminfechaentrega.tpl');
 	}
+
+	protected function addCarrier()
+    {
+        $carrier = new Carrier();
+
+        $carrier->name = $this->l('Transportista');
+        $carrier->is_module = true;
+        $carrier->active = 1;
+        $carrier->range_behavior = 1;
+        $carrier->need_range = 1;
+        $carrier->shipping_external = true;
+        $carrier->range_behavior = 0;
+        $carrier->external_module_name = $this->name;
+        $carrier->shipping_method = 2;
+
+        foreach (Language::getLanguages() as $lang) {
+            $carrier->delay[$lang['id_lang']] = $this->l('Transportista');
+        }
+
+        if ($carrier->add() == true) {
+            return $carrier;
+        }
+
+        return false;
+    }
 
 
 }
