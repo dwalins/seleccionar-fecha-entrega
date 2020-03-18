@@ -26,6 +26,6 @@
 <!-- Block seleccionarentrega -->
 <div class="panel">
     <h3><i class="icon-truck"></i> {l s='Fecha de entrega' mod='seleccionarentrega'}</h3>
-	<strong>{$fecha_entrega}</strong>
+    <strong>{$fecha_entrega}</strong>
 </div>
 <!-- /Block seleccionarentrega -->

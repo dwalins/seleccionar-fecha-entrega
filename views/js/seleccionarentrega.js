@@ -18,24 +18,24 @@
  */
 
 // Activamos las horas cuando se selecciona una fecha
-$(".delivery-options").on('change','#diasEntrega',function () { 
-	$('#horasEntrega').removeAttr("disabled");
+$("#hook-display-before-carrier").on('change','#diasEntrega',function () { 
+    $('#horasEntrega').removeAttr("disabled");
 });
 
-$(".delivery-options").on('change','#horasEntrega',function () { 
+$("#hook-display-before-carrier").on('change','#horasEntrega',function () { 
 
-	//get the selected value
-	var diaEntrega = $( "#diasEntrega option:selected" ).text();
-	var horaEntrega = $( "#horasEntrega option:selected" ).text();
+    //get the selected value
+    var diaEntrega = $( "#diasEntrega option:selected" ).text();
+    var horaEntrega = $( "#horasEntrega option:selected" ).text();
 
-	var FechaEntrega = { 
-		'diaEntrega':diaEntrega,
-		'horaEntrega':horaEntrega
-	};
+    var FechaEntrega = { 
+        'diaEntrega':diaEntrega,
+        'horaEntrega':horaEntrega
+    };
 
     //make the ajax call
     $.ajax({
-        url: '/index.php?fc=module&module=SeleccionarEntrega&controller=ajax',
+        url: '/index.php?fc=module&module=seleccionarentrega&controller=ajax',
         type: 'POST',
         data: FechaEntrega,
         success: function() {

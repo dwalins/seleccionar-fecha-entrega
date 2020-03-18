@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
+ * @author	PrestaShop SA <contact@prestashop.com>
  * @copyright 2007-2019 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of PrestaShop SA
@@ -22,8 +22,10 @@ require_once(dirname(__FILE__) . '/../../classes/Funciones.php');
 
 class SeleccionarEntregaajaxModuleFrontController extends ModuleFrontController
 {
-    public function initContent()
-    {
-        Funciones::insertarCarrito($this->context->cart->id, Tools::getVaule('diaEntrega') ." ". Tools::getVaule('horaEntrega'));
-    }
+		
+	public function initContent()
+	{
+        Funciones::insertarCarrito($this->context->cart->id, Tools::getValue('diaEntrega') ." ". Tools::getValue('horaEntrega'));
+        $this->setTemplate('module:seleccionarentrega/views/templates/front/front_entrega.tpl');
+	}	
 }

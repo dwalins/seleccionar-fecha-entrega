@@ -24,25 +24,25 @@
 *}
 
 <!-- Block SeleccionarEntrega -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
 <div class="fecha-entrega">
-	<h3>{l s='Seleccione una fecha de entrega del pedido' mod='seleccionarentrega'}</h3>
-	<select id="diasEntrega" name="diasEntrega">
-		<option value='{$tomorrow|date_format:"%A %e de %B de %Y"}'>{$tomorrow|date_format:"%A %e de %B de %Y"}</option>
-		<option value='{$aftertomorrow|date_format:"%A %e de %B de %Y"}'>{$aftertomorrow|date_format:"%A %e de %B de %Y"}</option>
-		<option value='{$afteraftertomorrow|date_format:"%A %e de %B de %Y"}'>{$afteraftertomorrow|date_format:"%A %e de %B de %Y"}</option>
-	</select>
-	<select id="horasEntrega" name="horasEntrega" disabled="disabled">
-		<option value="11:00 - 13:00">11:00 - 13:00</option>
-		<option value="12:00 - 14:00">12:00 - 14:00</option>
-		<option value="13:00 - 15:00">13:00 - 15:00</option>
-		<option value="14:00 - 16:00">14:00 - 16:00</option>
-		<option value="15:00 - 17:00">15:00 - 17:00</option>
-		<option value="18:00 - 20:00">18:00 - 20:00</option>
-		<option value="19:00 - 21:00">19:00 - 21:00</option>
-		<option value="19:00 - 21:00">19:00 - 21:00</option>
-	</select>
-	<br /><br />
+    <h3>{l s='Seleccione una fecha de entrega del pedido' mod='seleccionarentrega'}</h3>
+    <select id="diasEntrega" name="diasEntrega">
+        <option disabled selected value> -- {l s='Seleccione la fecha de entrega' mod='seleccionarentrega'} -- </option>
+        <option value='{$tomorrow|date_format:"%A %e de %B de %Y"}'>{$tomorrow|date_format:"%A %e de %B de %Y"}</option>
+        <option value='{$aftertomorrow|date_format:"%A %e de %B de %Y"}'>{$aftertomorrow|date_format:"%A %e de %B de %Y"}</option>
+        <option value='{$afteraftertomorrow|date_format:"%A %e de %B de %Y"}'>{$afteraftertomorrow|date_format:"%A %e de %B de %Y"}</option>
+    </select>
+    <select id="horasEntrega" name="horasEntrega" disabled="disabled">
+        <option disabled selected value> -- {l s='Seleccione la hora de entrega' mod='seleccionarentrega'} -- </option>
+        <option value="11:00 - 13:00">11:00 - 13:00</option>
+        <option value="12:00 - 14:00">12:00 - 14:00</option>
+        <option value="13:00 - 15:00">13:00 - 15:00</option>
+        <option value="14:00 - 16:00">14:00 - 16:00</option>
+        <option value="15:00 - 17:00">15:00 - 17:00</option>
+        <option value="18:00 - 20:00">18:00 - 20:00</option>
+        <option value="19:00 - 21:00">19:00 - 21:00</option>
+        <option value="19:00 - 21:00">19:00 - 21:00</option>
+    </select>
+    <br /><br />
 </div>
 <!-- /Block SeleccionarEntrega -->
