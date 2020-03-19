@@ -28,9 +28,9 @@
     <h3>{l s='Seleccione una fecha de entrega del pedido' mod='seleccionarentrega'}</h3>
     <select id="diasEntrega" name="diasEntrega">
         <option disabled selected value> -- {l s='Seleccione la fecha de entrega' mod='seleccionarentrega'} -- </option>
-        <option value='{$tomorrow|date_format:"%A %e de %B de %Y"}'>{$tomorrow|date_format:"%A %e de %B de %Y"}</option>
-        <option value='{$aftertomorrow|date_format:"%A %e de %B de %Y"}'>{$aftertomorrow|date_format:"%A %e de %B de %Y"}</option>
-        <option value='{$afteraftertomorrow|date_format:"%A %e de %B de %Y"}'>{$afteraftertomorrow|date_format:"%A %e de %B de %Y"}</option>
+        <option value='{$tomorrow}'>{$tomorrow}</option>
+        <option value='{$aftertomorrow}'>{$aftertomorrow}</option>
+        <option value='{$afteraftertomorrow}'>{$afteraftertomorrow}</option>
     </select>
     <select id="horasEntrega" name="horasEntrega" disabled="disabled">
         <option disabled selected value> -- {l s='Seleccione la hora de entrega' mod='seleccionarentrega'} -- </option>
